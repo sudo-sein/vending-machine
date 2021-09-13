@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -6,10 +7,18 @@ import static org.junit.jupiter.api.Assertions.*
 class VendingMachineTest {
 
     VendingMachine vendingMachine;
+    PrintStream standardOut = System.out;
+    ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeEach
     void "setup"() {
         vendingMachine = new VendingMachine(new VendingMachine.DummyDispenser());
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @AfterEach
+    void "tearDown"() {
+        System.setOut(standardOut);
     }
 
     @Test
@@ -59,6 +68,7 @@ class VendingMachineTest {
         coins.forEach({coin -> this.vendingMachine.coinInput(coin)});
         Integer result = this.vendingMachine.coffeeButtonPressed();
         assertEquals(0, result);
+        assertEquals("Coffee served", outputStreamCaptor.toString().trim());
     }
 
     @Test
@@ -67,6 +77,7 @@ class VendingMachineTest {
         coins.forEach({coin -> this.vendingMachine.coinInput(coin)});
         Integer result = this.vendingMachine.teaButtonPressed();
         assertEquals(0, result);
+        assertEquals("Tea served", outputStreamCaptor.toString().trim());
     }
 
     @Test

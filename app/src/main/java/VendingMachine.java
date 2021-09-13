@@ -12,14 +12,12 @@ public class VendingMachine implements IVendingMachine {
 
     final Integer TEA_PRICE = 32;
     final Integer COFFEE_PRICE = 42;
-    List<Integer> acceptedCoins = new ArrayList<Integer>();
+    List<Integer> acceptedCoins = List.of(5,2);
     List<Integer> coinGiven = new ArrayList<Integer>();
     IDrinkDispenser dispenser;
 
     public VendingMachine(IDrinkDispenser dispenser) {
         this.dispenser = dispenser;
-        this.acceptedCoins.add(2);
-        this.acceptedCoins.add(5);
     }
 
     // Return true if the coin is accepted.
@@ -33,8 +31,7 @@ public class VendingMachine implements IVendingMachine {
 
     // If sufficient funds available call "serveCoffee()" on the dispenser and return the total of the coins returned to the user; otherwise -1.
     public int coffeeButtonPressed() {
-        Integer amountGiven = coinGiven.stream().reduce(0, Integer::sum);
-        if (amountGiven > COFFEE_PRICE) {
+        if (this.hasCoins(COFFEE_PRICE)) {
             this.dispenser.serveCoffee();
             this.consumeCoins(COFFEE_PRICE);
             return this.returnAllCoinsPressed();
@@ -44,9 +41,8 @@ public class VendingMachine implements IVendingMachine {
 
     // If sufficient funds available call "serveTea()" on the dispenser and return the total of the coins returned to the user; otherwise -1.
     public int teaButtonPressed() {
-        Integer amountGiven = coinGiven.stream().reduce(0, Integer::sum);
-        if (amountGiven > TEA_PRICE) {
-            this.dispenser.serveCoffee();
+        if (this.hasCoins(TEA_PRICE)) {
+            this.dispenser.serveTea();
             this.consumeCoins(TEA_PRICE);
             return this.returnAllCoinsPressed();
         }
@@ -54,14 +50,37 @@ public class VendingMachine implements IVendingMachine {
     }
 
     private void consumeCoins(Integer amount) {
-        final Integer[] total = {0};
-        coinGiven.stream().map(integer -> {
-            if (total[0] < amount) {
-                total[0] = total[0] + integer;
-                return 0;
+        List<Integer> requiredCoins = this.requiredCoins(amount);
+        for (int i = 0; i < requiredCoins.size(); i++) {
+            for (int j = 0; j < requiredCoins.get(i); j++) {
+                this.coinGiven.remove(this.acceptedCoins.get(i));
             }
-            return integer;
-        });
+        }
+    }
+
+    private List<Integer> requiredCoins(Integer amount) {
+        List<Integer> finalresult = new ArrayList<>();
+        Integer totalAmount = amount;
+        for (var i = 0; i < this.acceptedCoins.size(); i++) {
+            Integer currentTypeValue = this.acceptedCoins.get(i);
+
+            Integer typeCount = Math.floorDiv(totalAmount, currentTypeValue);
+            finalresult.add(typeCount);
+            totalAmount -= (currentTypeValue * typeCount);
+        }
+        return finalresult;
+    };
+
+    private boolean hasCoins(Integer amount) {
+        List<Integer> requiredCoins = this.requiredCoins(amount);
+        List<Boolean> contains = new ArrayList();
+
+        for (int i = 0; i < requiredCoins.size(); i++) {
+            int finalI = i;
+            long inserted = this.coinGiven.stream().filter(c -> this.acceptedCoins.get(finalI).equals(c)).count();
+            contains.add(inserted >= requiredCoins.get(i));
+        }
+        return contains.stream().allMatch(isEnough -> isEnough);
     }
 
     // Return the total of the coins returned to the user.
@@ -81,6 +100,8 @@ public class VendingMachine implements IVendingMachine {
 
     public static void main(String[] args) {
         VendingMachine machine = new VendingMachine(new DummyDispenser());
-        System.out.println(machine.coffeeButtonPressed());
+        List<Integer> coins = List.of(5,5,5,5,5,5,2);
+        coins.forEach(coin -> machine.coinInput(coin));
+        System.out.println(machine.hasCoins(32));
     }
 }
