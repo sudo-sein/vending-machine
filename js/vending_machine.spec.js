@@ -4,6 +4,9 @@ const VendingMachine = require("./vending_machine");
 describe('Vending Machine', function () {
     let machine;
 
+    /**
+     * Exercise tests
+     */
     beforeEach(() => {
         machine = new VendingMachine(new TestDispenser())
     });
@@ -39,7 +42,6 @@ describe('Vending Machine', function () {
 
 
     it('should return change when TEA is dispensed', function () {
-
         const coffeeCoins = [20,20,20,5,5];
         coffeeCoins.forEach(coin => machine.insertCoin(coin));
         const result = machine.pressTea();
@@ -80,12 +82,29 @@ describe('Vending Machine', function () {
         expect(result).toBe(55);
     });
 
-
     it('should track money correctly', function () {
         const teaCoins = [20,20,5];
         teaCoins.forEach(coin => machine.insertCoin(coin));
         const result = machine.pressReturn();
-        expect(result).toBe(45)
+        expect(result).toBe(45);
+        expect(machine.insertedCoins.length).toBe(0);
+    });
+
+    /**
+     * Internal/Private methods tests
+     */
+    it('should check if machine have correct amount of coins', function () {
+        const coins = [20,20,5,5];
+        coins.forEach(coin => machine.insertCoin(coin));
+        const result = machine.hasCoins(25);
+        expect(result).toBeTruthy();
+    });
+
+    it('should check if machine have correct amount of coins #2', function () {
+        const coins = [20,20,5,5];
+        coins.forEach(coin => machine.insertCoin(coin));
+        const result = machine.hasCoins(79);
+        expect(result).toBeFalsy();
     });
 
 });

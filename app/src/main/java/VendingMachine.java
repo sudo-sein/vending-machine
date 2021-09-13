@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Not enough time to finish the task, and not all possibilities of Java available.
+ * When using this example, keep in mind that not all methods and capabilities of Java
+ * might be available in browser compiler, like lambdas and static methods.
  *
  */
 public class VendingMachine implements IVendingMachine {
@@ -61,9 +62,7 @@ public class VendingMachine implements IVendingMachine {
     private List<Integer> requiredCoins(Integer amount) {
         List<Integer> finalresult = new ArrayList<>();
         Integer totalAmount = amount;
-        for (var i = 0; i < this.acceptedCoins.size(); i++) {
-            Integer currentTypeValue = this.acceptedCoins.get(i);
-
+        for (Integer currentTypeValue : this.acceptedCoins) {
             Integer typeCount = Math.floorDiv(totalAmount, currentTypeValue);
             finalresult.add(typeCount);
             totalAmount -= (currentTypeValue * typeCount);
@@ -73,7 +72,7 @@ public class VendingMachine implements IVendingMachine {
 
     private boolean hasCoins(Integer amount) {
         List<Integer> requiredCoins = this.requiredCoins(amount);
-        List<Boolean> contains = new ArrayList();
+        List<Boolean> contains = new ArrayList<>();
 
         for (int i = 0; i < requiredCoins.size(); i++) {
             int finalI = i;
@@ -100,8 +99,6 @@ public class VendingMachine implements IVendingMachine {
 
     public static void main(String[] args) {
         VendingMachine machine = new VendingMachine(new DummyDispenser());
-        List<Integer> coins = List.of(5,5,5,5,5,5,2);
-        coins.forEach(coin -> machine.coinInput(coin));
-        System.out.println(machine.hasCoins(32));
+        System.out.println(machine.coffeeButtonPressed());
     }
 }

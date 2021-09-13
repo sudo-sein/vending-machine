@@ -4,11 +4,16 @@
   "description": "blueoptima citi interview exercise",
   "main": "vending_machine.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node vending_machine.js",
+    "test": "jest --coverage && stryker run"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "jest": "^27.1.1"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^5.4.0",
+    "@stryker-mutator/jest-runner": "^5.4.0"
   }
 }

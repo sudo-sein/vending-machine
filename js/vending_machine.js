@@ -7,6 +7,7 @@ function VendingMachine(dispenser) {
     this.insertedCoins = [];
 }
 
+// DON'T Change this name
 // Return a boolean to show if the coin was accepted.
 VendingMachine.prototype.insertCoin = function (coinValue) {
     if (this.acceptedCoins.includes(coinValue)) {
@@ -16,22 +17,20 @@ VendingMachine.prototype.insertCoin = function (coinValue) {
     return false;
 };
 
+// DON'T Change this name
 // Call serveTea and return the total value of coins returned, or -1 if there are insufficient coins in the machine.
 VendingMachine.prototype.pressTea = function () {
-    // const total = this.insertedCoins.reduce((acc, val) => acc + val);
     if (this.hasCoins(TEA_PRICE)) {
         this.dispenser.serveTea();
         this.consumeCoins(TEA_PRICE);
         return this.pressReturn();
     }
-
     return -1;
 };
 
+// DON'T Change this name
 // Call serveCoffee and return the total value of coins returned, or -1 if there are insufficient coins in the machine.
 VendingMachine.prototype.pressCoffee = function () {
-    const total = this.insertedCoins.length > 0 ? this.insertedCoins.reduce((acc, val) => acc + val) : 0;
-
     if (this.hasCoins(COFFEE_PRICE)) {
         this.dispenser.serveCoffee();
         this.consumeCoins(COFFEE_PRICE);
@@ -72,6 +71,7 @@ VendingMachine.prototype.requiredCoins = function (amount) {
     return finalresult;
 };
 
+// DON'T Change this name
 // Return the total value of coins in the machine.
 VendingMachine.prototype.pressReturn = function () {
     const returnAmount = this.insertedCoins.length > 0 ? this.insertedCoins.reduce((acc, val) => acc + val) : 0;
@@ -95,5 +95,4 @@ DummyDispenser.prototype.serveTea = function () {
 
 if (require.main === module) {
     var machine = new VendingMachine(new DummyDispenser());
-    console.log(machine.requiredCoins(125));
 }
