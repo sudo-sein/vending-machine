@@ -1,5 +1,4 @@
-import acme.IVendingMachine;
-import acme.IDrinkDispenser;
+package acme;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,12 +5,14 @@
  * For more details take a look at the 'Building Java & JVM projects' chapter in the Gradle
  * User Manual available at https://docs.gradle.org/6.7/userguide/building_java_projects.html
  */
-
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'groovy'
+    id 'info.solidsoft.pitest' version '1.5.1'
 }
+group 'acme'
+
 
 repositories {
     // Use JCenter for resolving dependencies.
@@ -29,9 +31,12 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'VendingMachine'
+    mainClass = 'acme.VendingMachine'
 }
 
 test {
     useJUnitPlatform()
+}
+pitest {
+    junit5PluginVersion = '0.12'
 }
