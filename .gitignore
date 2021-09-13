@@ -158,3 +158,5 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij+iml,maven,gradle
+# Ignore Gradle build output directory
+build
