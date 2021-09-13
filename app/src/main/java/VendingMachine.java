@@ -66,7 +66,7 @@ public class VendingMachine implements IVendingMachine {
 
     // Return the total of the coins returned to the user.
     public int returnAllCoinsPressed() {
-        return acceptedCoins.stream().reduce(0, Integer::sum);
+        return coinGiven.stream().reduce(0, Integer::sum);
     }
 
     static class DummyDispenser implements IDrinkDispenser {

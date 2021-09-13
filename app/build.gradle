@@ -31,3 +31,7 @@ application {
     // Define the main class for the application.
     mainClass = 'VendingMachine'
 }
+
+test {
+    useJUnitPlatform()
+}
